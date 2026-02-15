@@ -34,28 +34,6 @@ The dataset used in this project is the **Dry Bean Dataset** obtained from the U
 | Random Forest        | Best performer with robust generalization. |
 | XGBoost              | High accuracy and stable results. |
 
-## Project Structure
-
-```
-dry-bean-classification/
-│
-├── app.py                  # Streamlit web app
-├── Split.py                # Train-test split
-├── test.py                 # Evaluate saved models
-├── train.py                # Master script to run all models
-├── model/                  # Saved model files (pkl)
-├── results/                # Model evaluation metrics and confusion matrices
-├── data/                   # Training and testing CSV files
-├── requirements.txt        # Required Python packages
-└── README.md               # Project overview (this file)
-```
-
-## Streamlit App Features
-
-- Upload custom CSV dataset for evaluation.
-- Choose from multiple trained ML models.
-- View classification accuracy and confusion matrix.
-- Preview of predicted results.
 
 
 ---

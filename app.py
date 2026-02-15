@@ -16,9 +16,6 @@ from sklearn.metrics import (
 
 st.set_page_config(page_title="Dry Bean Classification", layout="wide")
 
-# -----------------------------------------------------
-# Load Models
-# -----------------------------------------------------
 @st.cache_resource
 def load_models():
     return {
@@ -32,22 +29,13 @@ def load_models():
 
 models = load_models()
 
-# -----------------------------------------------------
-# Sidebar Controls
-# -----------------------------------------------------
 st.sidebar.header("Controls")
 
 model_choice = st.sidebar.selectbox("Select Model", list(models.keys()))
 uploaded_file = st.sidebar.file_uploader("Upload CSV Dataset", type=["csv"])
 
-# -----------------------------------------------------
-# Dynamic Header
-# -----------------------------------------------------
 st.title(f"Dry Bean Classification — {model_choice}")
 
-# -----------------------------------------------------
-# Main Logic
-# -----------------------------------------------------
 if uploaded_file:
 
     df = pd.read_csv(uploaded_file)
@@ -84,9 +72,6 @@ if uploaded_file:
     except Exception:
         pass
 
-    # -------------------------------------------------
-    # Metrics Display
-    # -------------------------------------------------
     st.subheader("Model Performance Metrics")
 
     metrics_df = pd.DataFrame([{
@@ -100,9 +85,6 @@ if uploaded_file:
 
     st.dataframe(metrics_df)
 
-    # -------------------------------------------------
-    # Confusion Matrix
-    # -------------------------------------------------
     st.subheader("Confusion Matrix")
 
     cm = confusion_matrix(y_true, y_pred)
@@ -114,15 +96,22 @@ if uploaded_file:
 
     st.pyplot(fig)
 
-    # -------------------------------------------------
-    # Predictions Preview
-    # -------------------------------------------------
     st.subheader("Predictions Preview")
 
     preview_df = df.copy()
     preview_df["Predicted Class"] = le.inverse_transform(y_pred)
 
     st.dataframe(preview_df.head())
+
+    csv = preview_df.to_csv(index=False).encode("utf-8")
+    st.download_button(
+        label="Download Predictions as CSV",
+        data=csv,
+        file_name="predictions.csv",
+        mime="text/csv",
+    )
+
+    st.success("Evaluation complete!")
 
 else:
     st.info("Upload a CSV dataset to begin evaluation")

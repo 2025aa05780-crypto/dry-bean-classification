@@ -34,10 +34,15 @@ st.sidebar.header("Controls")
 model_choice = st.sidebar.selectbox("Select Model", list(models.keys()))
 uploaded_file = st.sidebar.file_uploader("Upload CSV Dataset", type=["csv"])
 
+st.sidebar.markdown("---")
+st.sidebar.markdown("Don't have test data?")
+st.sidebar.markdown(
+    '[Download Sample Test CSV](https://raw.githubusercontent.com/2025aa05780-crypto/dry-bean-classification/main/data/Dry_Bean_Test.csv)'
+)
+
 st.title(f"Dry Bean Classification — {model_choice}")
 
 if uploaded_file:
-
     df = pd.read_csv(uploaded_file)
 
     if "Class" not in df.columns:
@@ -73,7 +78,6 @@ if uploaded_file:
         pass
 
     st.subheader("Model Performance Metrics")
-
     metrics_df = pd.DataFrame([{
         "Accuracy": accuracy,
         "Precision": precision,
@@ -82,25 +86,19 @@ if uploaded_file:
         "MCC": mcc,
         "AUC": auc
     }])
-
     st.dataframe(metrics_df)
 
     st.subheader("Confusion Matrix")
-
     cm = confusion_matrix(y_true, y_pred)
-
     fig, ax = plt.subplots()
     sns.heatmap(cm, annot=True, fmt="d", ax=ax)
     ax.set_xlabel("Predicted Class")
     ax.set_ylabel("Actual Class")
-
     st.pyplot(fig)
 
     st.subheader("Predictions Preview")
-
     preview_df = df.copy()
     preview_df["Predicted Class"] = le.inverse_transform(y_pred)
-
     st.dataframe(preview_df.head())
 
     csv = preview_df.to_csv(index=False).encode("utf-8")
